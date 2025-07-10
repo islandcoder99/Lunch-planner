@@ -4,80 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Was gibt's heute zu essen?</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    h1 {
-      color: #2c3e50;
-      font-size: 28px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    #essen {
-      margin: 10px auto;
-      padding: 20px;
-      font-size: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      color: #333;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background-color: #27ae60;
-      color: white;
-      cursor: pointer;
-      margin: 10px;
-      width: 90%;
-      max-width: 400px;
-    }
-    button:active {
-      transform: scale(0.98);
-    }
-    select, input[type="text"] {
-      font-size: 16px;
-      padding: 8px;
-      margin: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 90%;
-      max-width: 400px;
-    }
-    .input-group, .filter-row, #verlauf {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 400px;
-    }
-    textarea {
-      width: 90%;
-      max-width: 400px;
-      height: 100px;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      background-color: #f9f9f9;
-      font-size: 14px;
-      resize: none;
-    }
+    html,body{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(120deg,#f0f4f8,#d9e2ec);}body{display:flex;flex-direction:column;align-items:center;padding:20px;}h1{color:#2c3e50;font-size:28px;margin-bottom:20px;text-align:center;}#essen{margin:10px auto;padding:20px;font-size:20px;background:#fff;border-radius:10px;width:90%;max-width:400px;box-shadow:0 4px 10px rgba(0,0,0,0.1);color:#333;}button{padding:12px 20px;font-size:16px;border:none;border-radius:8px;background:#27ae60;color:#fff;cursor:pointer;margin:10px;width:90%;max-width:400px;}button:active{transform:scale(0.98);}select,input{font-size:16px;padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;width:90%;max-width:400px;} .input-group,.filter-row{display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px;}ul{width:90%;max-width:400px;padding-left:20px;list-style-type:disc;}
   </style>
 </head>
 <body>
@@ -89,108 +19,111 @@
       <option value="gesund">Gesund</option>
       <option value="herzhaft">Herzhaft</option>
     </select>
+    <select id="typ">
+      <option value="alle">Typ: Alle</option>
+      <option value="fleisch">mit Fleisch</option>
+      <option value="vegetarisch">Vegetarisch</option>
+      <option value="vegan">Vegan</option>
+    </select>
     <select id="tage">
       <option value="alle">Tage: Alle</option>
-      <option value="1tag">Für 1 Tag</option>
-      <option value="2tage">Für 2 Tage</option>
+      <option value="1tag">1 Tag</option>
+      <option value="2tage">2 Tage</option>
     </select>
   </div>
   <div id="essen">Drück auf den Button!</div>
   <button onclick="zufallEssen()">Was gibt's heute?</button>
-  <div id="verlauf">
-    <strong>Letzte Essen:</strong>
-    <div id="letzteEssen">–</div>
-    <button onclick="rueckgaengig()">Letztes Essen zurücknehmen</button>
-    <button onclick="verlaufZuruecksetzen()" style="background:#c0392b;">Verlauf zurücksetzen</button>
-  </div>
   <div class="input-group">
-    <input type="text" id="neuesEssen" placeholder="z. B. Lasagne">
+    <input type="text" id="neuesEssen" placeholder="z. B. Lasagne">
     <select id="neueKategorie">
       <option value="schnell">Schnell</option>
       <option value="gesund">Gesund</option>
       <option value="herzhaft">Herzhaft</option>
     </select>
+    <select id="neuerTyp">
+      <option value="fleisch">mit Fleisch</option>
+      <option value="vegetarisch">Vegetarisch</option>
+      <option value="vegan">Vegan</option>
+    </select>
     <select id="neueTage">
-      <option value="">Keine Angabe</option>
-      <option value="1tag">Für 1 Tag</option>
-      <option value="2tage">Für 2 Tage</option>
+      <option value="1tag">1 Tag</option>
+      <option value="2tage">2 Tage</option>
     </select>
     <button onclick="hinzufuegen()">Hinzufügen</button>
   </div>
-  <textarea id="liste" readonly>
-Sahnefilett|herzhaft,2tage
-Bratlinge|gesund,1tag
-Nudelauflauf|herzhaft,2tage
-Lasagne|herzhaft,2tage
-Curry|gesund,2tage
-Spinatsoße|herzhaft,2tage
-Bohnen mit weißer Soße|herzhaft,2tage
-Spiegelei mit Stuff|schnell,1tag
-Hundefutter|schnell,1tag
-
-
-  </textarea>
+  <ul id="htmlListe"></ul>
   <button onclick="eintragLoeschen()">Letzten Eintrag löschen</button>
-  <script>
-    function aktualisiereLetzteEssen() {
-      const letzte = JSON.parse(localStorage.getItem("letzteEssen") || "[]");
-      document.getElementById("letzteEssen").innerText = letzte.length > 0 ? letzte.join(" → ") : "–";
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyBf4BRXeVAAnoQ9exR7tXyN2-RFnuP_N80",
+  authDomain: "essen-337a0.firebaseapp.com",
+  databaseURL: "https://essen-337a0-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "essen-337a0",
+  storageBucket: "essen-337a0.appspot.com",
+  messagingSenderId: "215792748626",
+  appId: "1:215792748626:web:7b3dde7f9994c7ce49b78b",
+  measurementId: "G-FRD2HZVNJH"
+};
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  function ladeListe() {
+    db.ref("essen").once("value", snapshot => {
+      const daten = snapshot.val() || [];
+      zeigeListe(daten);
+    });
+  }
+
+  function zeigeListe(liste) {
+    const ul = document.getElementById("htmlListe");
+    ul.innerHTML = "";
+    liste.forEach(e => {
+      const li = document.createElement("li");
+      li.textContent = e.name;
+      ul.appendChild(li);
+    });
+    window.essensListe = liste;
+  }
+
+  function hinzufuegen() {
+    const name = document.getElementById("neuesEssen").value.trim();
+    if (!name) return alert("Bitte gib einen Namen an.");
+    const kat = document.getElementById("neueKategorie").value;
+    const typ = document.getElementById("neuerTyp").value;
+    const tage = document.getElementById("neueTage").value;
+    const eintrag = { name, details: [kat, typ, tage].join(",") };
+    window.essensListe.push(eintrag);
+    db.ref("essen").set(window.essensListe);
+    zeigeListe(window.essensListe);
+    document.getElementById("neuesEssen").value = "";
+  }
+
+  function eintragLoeschen() {
+    window.essensListe.pop();
+    db.ref("essen").set(window.essensListe);
+    zeigeListe(window.essensListe);
+  }
+
+  function zufallEssen() {
+    const k = document.getElementById("kategorie").value;
+    const t = document.getElementById("typ").value;
+    const d = document.getElementById("tage").value;
+    const kandidaten = window.essensListe.filter(e => {
+      const teile = e.details.toLowerCase().split(",");
+      return (k === "alle" || teile.includes(k)) &&
+             (t === "alle" || teile.includes(t)) &&
+             (d === "alle" || teile.includes(d));
+    });
+    const ausgabe = document.getElementById("essen");
+    if (!kandidaten.length) {
+      ausgabe.textContent = "Keine passenden Gerichte gefunden.";
+      return;
     }
-    function zufallEssen() {
-      const textarea = document.getElementById("liste");
-      const katFilter = document.getElementById("kategorie").value;
-      const tageFilter = document.getElementById("tage").value;
-      const zeilen = textarea.value.split("\n").map(e => e.trim()).filter(e => e);
-      const gefiltert = zeilen.filter(eintrag => {
-        const [gericht, rest] = eintrag.split("|");
-        if (!rest) return false;
-        const teile = rest.split(",").map(t => t.trim().toLowerCase());
-        const hatKat = katFilter === "alle" || teile.includes(katFilter);
-        const hatTage = tageFilter === "alle" || teile.includes(tageFilter);
-        return hatKat && hatTage;
-      });
-      if (gefiltert.length === 0) {
-        document.getElementById("essen").innerText = "Keine passenden Gerichte gefunden.";
-        return;
-      }
-      const zufall = gefiltert[Math.floor(Math.random() * gefiltert.length)].split("|")[0];
-      document.getElementById("essen").innerText = zufall;
-      const letzte = JSON.parse(localStorage.getItem("letzteEssen") || "[]");
-      letzte.unshift(zufall);
-      if (letzte.length > 7) letzte.pop();
-      localStorage.setItem("letzteEssen", JSON.stringify(letzte));
-      aktualisiereLetzteEssen();
-    }
-    function hinzufuegen() {
-      const name = document.getElementById("neuesEssen").value.trim();
-      const kat = document.getElementById("neueKategorie").value.trim();
-      const tage = document.getElementById("neueTage").value.trim();
-      if (!name) {
-        alert("Bitte gib einen Namen für das Gericht ein.");
-        return;
-      }
-      const eintrag = tage ? `${name}|${kat},${tage}` : `${name}|${kat}`;
-      const textarea = document.getElementById("liste");
-      textarea.value += `\n${eintrag}`;
-      document.getElementById("neuesEssen").value = "";
-    }
-    function eintragLoeschen() {
-      const textarea = document.getElementById("liste");
-      const zeilen = textarea.value.split("\n").filter(e => e.trim() !== "");
-      zeilen.pop();
-      textarea.value = zeilen.join("\n");
-    }
-    function rueckgaengig() {
-      const letzte = JSON.parse(localStorage.getItem("letzteEssen") || "[]");
-      if (letzte.length > 0) letzte.shift();
-      localStorage.setItem("letzteEssen", JSON.stringify(letzte));
-      aktualisiereLetzteEssen();
-    }
-    function verlaufZuruecksetzen() {
-      localStorage.removeItem("letzteEssen");
-      aktualisiereLetzteEssen();
-    }
-    aktualisiereLetzteEssen();
-  </script>
+    ausgabe.textContent = kandidaten[Math.floor(Math.random() * kandidaten.length)].name;
+  }
+
+  window.addEventListener("load", ladeListe);
+</script>
 </body>
 </html>
