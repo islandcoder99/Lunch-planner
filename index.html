@@ -7,69 +7,96 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
-    html,body{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(120deg,#f0f4f8,#d9e2ec);}body{display:flex;flex-direction:column;align-items:center;padding:20px;}h1{color:#2c3e50;font-size:28px;margin-bottom:20px;text-align:center;}#essen{margin:10px auto;padding:20px;font-size:20px;background:#fff;border-radius:10px;width:90%;max-width:400px;box-shadow:0 4px 10px rgba(0,0,0,0.1);color:#333;}button{padding:12px 20px;font-size:16px;border:none;border-radius:8px;background:#27ae60;color:#fff;cursor:pointer;margin:10px;width:90%;max-width:400px;}button:active{transform:scale(0.98);}select,input{font-size:16px;padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;width:90%;max-width:400px;} .input-group,.filter-row{display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px;}ul{width:90%;max-width:400px;padding-left:20px;list-style-type:disc;}
+    html,body{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(120deg,#f0f4f8,#d9e2ec);}body{display:flex;flex-direction:column;align-items:center;padding:20px;}h1{color:#2c3e50;font-size:28px;margin-bottom:20px;text-align:center;}#essen{margin:10px auto;padding:20px;font-size:20px;background:#fff;border-radius:10px;width:90%;max-width:400px;box-shadow:0 4px 10px rgba(0,0,0,0.1);color:#333;}button{padding:12px 20px;font-size:16px;border:none;border-radius:8px;background:#27ae60;color:#fff;cursor:pointer;margin:10px;width:90%;max-width:400px;}button:active{transform:scale(0.98);}select,input{font-size:16px;padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;width:90%;max-width:400px;} .input-group,.filter-row{display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px;}ul{width:90%;max-width:400px;padding-left:20px;list-style-type:disc;}#profilwahl{display:flex;flex-direction:column;align-items:center;gap:15px;margin-top:100px;}#mainApp{display:none;flex-direction:column;align-items:center;width:100%;}
   </style>
 </head>
 <body>
-  <h1>Was gibt's heute zu essen?</h1>
-  <div class="filter-row">
-    <select id="kategorie">
-      <option value="alle">Kategorie: Alle</option>
-      <option value="schnell">Schnell</option>
-      <option value="gesund">Gesund</option>
-      <option value="herzhaft">Herzhaft</option>
-    </select>
-    <select id="typ">
-      <option value="alle">Typ: Alle</option>
-      <option value="fleisch">mit Fleisch</option>
-      <option value="vegetarisch">Vegetarisch</option>
-      <option value="vegan">Vegan</option>
-    </select>
-    <select id="tage">
-      <option value="alle">Tage: Alle</option>
-      <option value="1tag">1 Tag</option>
-      <option value="2tage">2 Tage</option>
-    </select>
+  <div id="profilwahl">
+    <h1>Willkommen!</h1>
+    <p>Wähle dein Profil:</p>
+    <button onclick="profilWaehlen('Fehmarn')">Fehmarn</button>
+    <button onclick="profilWaehlen('Hamburg')">Hamburg</button>
+    <button onclick="profilWaehlen('Karlsruhe')">Karlsruhe</button>
+    <button onclick="profilWaehlen('Budapest')">Budapest</button>
   </div>
-  <div id="essen">Drück auf den Button!</div>
-  <button onclick="zufallEssen()">Was gibt's heute?</button>
-  <div class="input-group">
-    <input type="text" id="neuesEssen" placeholder="z. B. Lasagne">
-    <select id="neueKategorie">
-      <option value="schnell">Schnell</option>
-      <option value="gesund">Gesund</option>
-      <option value="herzhaft">Herzhaft</option>
-    </select>
-    <select id="neuerTyp">
-      <option value="fleisch">mit Fleisch</option>
-      <option value="vegetarisch">Vegetarisch</option>
-      <option value="vegan">Vegan</option>
-    </select>
-    <select id="neueTage">
-      <option value="1tag">1 Tag</option>
-      <option value="2tage">2 Tage</option>
-    </select>
-    <button onclick="hinzufuegen()">Hinzufügen</button>
+
+  <div id="mainApp">
+    <h1>Was gibt's heute zu essen?</h1>
+    <div class="filter-row">
+      <select id="kategorie">
+        <option value="alle">Kategorie: Alle</option>
+        <option value="schnell">Schnell</option>
+        <option value="gesund">Gesund</option>
+        <option value="herzhaft">Herzhaft</option>
+      </select>
+      <select id="typ">
+        <option value="alle">Typ: Alle</option>
+        <option value="fleisch">mit Fleisch</option>
+        <option value="vegetarisch">Vegetarisch</option>
+        <option value="vegan">Vegan</option>
+      </select>
+      <select id="tage">
+        <option value="alle">Tage: Alle</option>
+        <option value="1tag">1 Tag</option>
+        <option value="2tage">2 Tage</option>
+      </select>
+    </div>
+    <div id="essen">Drück auf den Button!</div>
+    <button onclick="zufallEssen()">Was gibt's heute?</button>
+    <div class="input-group">
+      <input type="text" id="neuesEssen" placeholder="z. B. Lasagne">
+      <select id="neueKategorie">
+        <option value="schnell">Schnell</option>
+        <option value="gesund">Gesund</option>
+        <option value="herzhaft">Herzhaft</option>
+      </select>
+      <select id="neuerTyp">
+        <option value="fleisch">mit Fleisch</option>
+        <option value="vegetarisch">Vegetarisch</option>
+        <option value="vegan">Vegan</option>
+      </select>
+      <select id="neueTage">
+        <option value="1tag">1 Tag</option>
+        <option value="2tage">2 Tage</option>
+      </select>
+      <button onclick="hinzufuegen()">Hinzufügen</button>
+    </div>
+    <ul id="htmlListe"></ul>
+    <button onclick="eintragLoeschen()">Letzten Eintrag löschen</button>
+    <button onclick="zurueckZurProfilwahl()">Zurück zur Profilwahl</button>
   </div>
-  <ul id="htmlListe"></ul>
-  <button onclick="eintragLoeschen()">Letzten Eintrag löschen</button>
 
 <script>
   const firebaseConfig = {
-  apiKey: "AIzaSyBf4BRXeVAAnoQ9exR7tXyN2-RFnuP_N80",
-  authDomain: "essen-337a0.firebaseapp.com",
-  databaseURL: "https://essen-337a0-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "essen-337a0",
-  storageBucket: "essen-337a0.appspot.com",
-  messagingSenderId: "215792748626",
-  appId: "1:215792748626:web:7b3dde7f9994c7ce49b78b",
-  measurementId: "G-FRD2HZVNJH"
-};
+    apiKey: "AIzaSyBf4BRXeVAAnoQ9exR7tXyN2-RFnuP_N80",
+    authDomain: "essen-337a0.firebaseapp.com",
+    databaseURL: "https://essen-337a0-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "essen-337a0",
+    storageBucket: "essen-337a0.appspot.com",
+    messagingSenderId: "215792748626",
+    appId: "1:215792748626:web:7b3dde7f9994c7ce49b78b",
+    measurementId: "G-FRD2HZVNJH"
+  };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+  let aktuellesProfil = null;
+
+  function profilWaehlen(name) {
+    aktuellesProfil = name;
+    document.getElementById("profilwahl").style.display = "none";
+    document.getElementById("mainApp").style.display = "flex";
+    ladeListe();
+  }
+
+  function zurueckZurProfilwahl() {
+    aktuellesProfil = null;
+    document.getElementById("mainApp").style.display = "none";
+    document.getElementById("profilwahl").style.display = "flex";
+  }
 
   function ladeListe() {
-    db.ref("essen").once("value", snapshot => {
+    if (!aktuellesProfil) return;
+    db.ref("essen/" + aktuellesProfil).once("value", snapshot => {
       const daten = snapshot.val() || [];
       zeigeListe(daten);
     });
@@ -88,20 +115,21 @@
 
   function hinzufuegen() {
     const name = document.getElementById("neuesEssen").value.trim();
-    if (!name) return alert("Bitte gib einen Namen an.");
+    if (!name || !aktuellesProfil) return alert("Bitte gib einen Namen an und wähle ein Profil.");
     const kat = document.getElementById("neueKategorie").value;
     const typ = document.getElementById("neuerTyp").value;
     const tage = document.getElementById("neueTage").value;
     const eintrag = { name, details: [kat, typ, tage].join(",") };
     window.essensListe.push(eintrag);
-    db.ref("essen").set(window.essensListe);
+    db.ref("essen/" + aktuellesProfil).set(window.essensListe);
     zeigeListe(window.essensListe);
     document.getElementById("neuesEssen").value = "";
   }
 
   function eintragLoeschen() {
+    if (!aktuellesProfil) return;
     window.essensListe.pop();
-    db.ref("essen").set(window.essensListe);
+    db.ref("essen/" + aktuellesProfil).set(window.essensListe);
     zeigeListe(window.essensListe);
   }
 
@@ -122,8 +150,6 @@
     }
     ausgabe.textContent = kandidaten[Math.floor(Math.random() * kandidaten.length)].name;
   }
-
-  window.addEventListener("load", ladeListe);
 </script>
 </body>
 </html>
