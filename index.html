@@ -8,16 +8,29 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
     html,body{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(120deg,#f0f4f8,#d9e2ec);}body{display:flex;flex-direction:column;align-items:center;padding:20px;}h1{color:#2c3e50;font-size:28px;margin-bottom:20px;text-align:center;}#essen{margin:10px auto;padding:20px;font-size:20px;background:#fff;border-radius:10px;width:90%;max-width:400px;box-shadow:0 4px 10px rgba(0,0,0,0.1);color:#333;}button{padding:12px 20px;font-size:16px;border:none;border-radius:8px;background:#27ae60;color:#fff;cursor:pointer;margin:10px;width:90%;max-width:400px;}button:active{transform:scale(0.98);}select,input{font-size:16px;padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;width:90%;max-width:400px;} .input-group,.filter-row{display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px;}ul{width:90%;max-width:400px;padding-left:20px;list-style-type:disc;}#profilwahl{display:flex;flex-direction:column;align-items:center;gap:15px;margin-top:100px;}#mainApp{display:none;flex-direction:column;align-items:center;width:100%;}
+    .profilbild-klein{width:24px;height:24px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle;}
   </style>
 </head>
 <body>
   <div id="profilwahl">
     <h1>Willkommen!</h1>
     <p>Wähle dein Profil:</p>
-    <button onclick="profilWaehlen('Fehmarn')">Fehmarn</button>
-    <button onclick="profilWaehlen('Hamburg')">Hamburg</button>
-    <button onclick="profilWaehlen('Karlsruhe')">Karlsruhe</button>
-    <button onclick="profilWaehlen('Budapest')">Budapest</button>
+    <button onclick="profilWaehlen('Fehmarn')">
+      <img class="profilbild-klein" src="https://img.fotocommunity.com/fehmarnsundbruecke-bacdb310-1dd6-43e3-a4ba-9b299a86847c.jpg?height=1080" alt="Fehmarn Profilbild">
+      Fehmarn
+    </button>
+    <button onclick="profilWaehlen('Hamburg')">
+    <img class="profilbild-klein" src="https://www.sebastian-grote.de/blog/wp-content/uploads/2023/03/hamburg-alster-rathaus-im-sommer-04-1536x1024.jpg" alt="Hamburg Profilbild">
+    Hamburg
+    </button>
+    <button onclick="profilWaehlen('Karlsruhe')">
+    <img class="profilbild-klein" src="https://www.holidaywolf.de/wp/wp-content/uploads/2040/01/schloss-karlsruhe.jpg" alt="Karlsruhe Profilbild">
+    Karlsruhe
+    </button>
+    <button onclick="profilWaehlen('Budapest')">
+    <img class="profilbild-klein" src="https://statemag.state.gov/wp-content/uploads/2022/08/0922pom-4-scaled.jpg" alt="Budapest Profilbild">
+    Budapest
+    </button>
   </div>
 
   <div id="mainApp">
@@ -153,3 +166,4 @@
 </script>
 </body>
 </html>
+
